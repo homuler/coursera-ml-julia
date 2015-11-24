@@ -28,7 +28,7 @@ function submitWithConf(conf :: Conf)
       @printf "!! Submission failed: %s\n" respJSON["errorMessage"]
     else
       showFeedback(conf.parts, respJSON)
-      write(open("token.mat"), @sprintf("%s\n%s\n", userInfo.email, userInfo.token))
+      write(open("token.mat", "w"), @sprintf("%s\n%s\n", userInfo.email, userInfo.token))
     end
     return resp
   catch exp
