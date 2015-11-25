@@ -37,7 +37,7 @@ function solver(partId)
   elseif partId == 2
     return @sprintf("%0.5f ", computeCost(X1, Y1, [0.5 -0.5]'))
   elseif partId == 3
-    return join(map(x -> @sprintf("%0.5f ", x), gradientDescent(X1, Y1, [0.5 -0.5]', 0.01, 10)), " ")
+    return join(map(x -> @sprintf("%0.5f ", x), gradientDescent(X1, Y1, [0.5 -0.5]', 0.01, 10)[1:2]), " ")
   elseif partId == 4
     return join(map(x -> @sprintf("%0.5f ", x), featureNormalize(X2[:, 2:4])), " ")
   elseif partId == 5
