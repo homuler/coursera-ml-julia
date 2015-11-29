@@ -37,13 +37,13 @@ function solver(partId)
   elseif partId == 2
     return @sprintf("%0.5f ", computeCost(X1, Y1, [0.5 -0.5]'))
   elseif partId == 3
-    return join(map(x -> @sprintf("%0.5f ", x), gradientDescent(X1, Y1, [0.5 -0.5]', 0.01, 10)[1:2]), " ")
+    return join(map(x -> @sprintf("%0.5f ", x), gradientDescent(X1, Y1, [0.5 -0.5]', 0.01, 10)[1:size(X1)[2]]), " ")
   elseif partId == 4
-    return join(map(x -> @sprintf("%0.5f ", x), featureNormalize(X2[:, 2:4])), " ")
+    return join(map(x -> @sprintf("%0.5f ", x), featureNormalize(X2[:, 2:4]))[1:size(X2)[1], :], " ")
   elseif partId == 5
     return @sprintf("%0.5f ", computeCostMulti(X2, Y2, [0.1 0.2 0.3 0.4]'));
   elseif partId == 6
-    return join(map(x -> @sprintf("%0.5f ", x), gradientDescentMulti(X2, Y2, [-0.1 -0.2 -0.3 -0.4]', 0.01, 10)), " ");
+    return join(map(x -> @sprintf("%0.5f ", x), gradientDescentMulti(X2, Y2, [-0.1 -0.2 -0.3 -0.4]', 0.01, 10)[1:size(X2)[2]]), " ");
   elseif partId == 7
     return join(map(x -> @sprintf("%0.5f ", x), normalEqn(X2, Y2)), " ");
   end
