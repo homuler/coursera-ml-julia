@@ -23,7 +23,6 @@
 # y refers to the profit in $10,000s
 #
 
-using DataFrames
 using PyPlot
 
 include("warmUpExercise.jl")

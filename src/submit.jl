@@ -68,7 +68,6 @@ end
 function solveProblems(conf :: Conf)
   anslist = Dict{Int, Dict{AbstractString, AbstractString}}()
   for part in conf.parts
-    println(conf.solver(part.partId))
     anslist[part.partId] = Dict("output" => conf.solver(part.partId))
   end
   return anslist
