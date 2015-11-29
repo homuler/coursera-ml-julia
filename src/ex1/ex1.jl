@@ -83,7 +83,7 @@ theta = theta[1:2]
 # Plot the linear fit
 hold(true)
 plot(X[:, 2], X*theta, linestyle="-", color="red")
-legend("Training data", "Linear regression")
+legend(["Linear regression", "Training Data"])
 hold(false) # don't overlay any more plots on this figure
 
 # Predict values for population sizes of 35,000 and 70,000
