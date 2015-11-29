@@ -1,7 +1,7 @@
 # Coursera ML Julia
 
 ## Description
-Scripts for [Coursera Stanford Machine Learning](https://www.coursera.org/learmachine-learning/home/welcome) assignments in Julia.  
+Scripts for [Coursera Stanford Machine Learning](https://www.coursera.org/learn/machine-learning/home/welcome) assignments in Julia.  
 As to exercises, this repository has only mock methods, so you should implement those first, and then submit the solutions.
 
 ## Requirements
