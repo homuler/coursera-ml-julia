@@ -7,9 +7,9 @@ using PyPlot
 """ ->
 function plotData(X, y)
 
-# Create New Figure
-figure()
-hold(true)
+  # Create New Figure
+  figure()
+  hold(true)
 
   # ====================== YOUR CODE HERE ======================
   # Instructions: Plot the positive and negative examples on a
