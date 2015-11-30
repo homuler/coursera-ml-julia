@@ -36,14 +36,14 @@ function plotDecisionBoundary(theta, X, y)
 
     z = zeros(length(u), length(v))
     # Evaluate z = theta*x over the grid
-    for j in 1:length(v), i = 1:length(u)
-      z(i,j) = mapFeature(u(i), v(j))*theta
+    for j in 1:length(v), i in 1:length(u)
+      z[i, j] = (mapFeature([u[i]], [v[j]]) * theta)[1]
     end
     z = z' # important to transpose z before calling contour
 
     # Plot z = 0
     # Notice you need to specify the range [0, 0]
-    contour(u, v, z, [0, 0], "LineWidth", 2)
+    contour(u, v, z, [0, 0], linewidth=2)
   end
   hold(false)
 end

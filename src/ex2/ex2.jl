@@ -88,6 +88,7 @@ readline()
 #options = optimset("GradObj", "on", "MaxIter", 400)
 options = Opt(:LN_NELDERMEAD, n+1)
 min_objective!(options, (theta, grad) -> costFunction(theta, X, y)[1])
+maxeval!(options, 400)
 #  Run fminunc to obtain the optimal theta
 #  This function will return theta and the cost
 (cost, theta, _) = optimize(options, initial_theta)
@@ -95,7 +96,7 @@ min_objective!(options, (theta, grad) -> costFunction(theta, X, y)[1])
 # Print theta to screen
 @printf("Cost at theta found by optimize: %f\n", cost)
 @printf("theta: \n")
-@printf("%s", join(map(x -> @sprintf(" %f ", x), theta), "\n"))
+@printf("%s\n", join(map(x -> @sprintf(" %f ", x), theta), "\n"))
 
 # Plot Boundary
 plotDecisionBoundary(theta, X, y)
@@ -107,7 +108,7 @@ xlabel("Exam 1 score")
 ylabel("Exam 2 score")
 
 # Specified in plot order
-legend(["Admitted", "Not admitted"])
+legend(["Regression", "Admitted", "Not admitted"])
 hold(false)
 
 @printf("\nProgram paused. Press enter to continue.\n")
