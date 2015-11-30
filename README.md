@@ -17,3 +17,14 @@ julia
 julia> include("submit.jl")
 julia> submit()  
 ```
+
+## ToDo
+- Exercise1
+  - ex1_m.jl
+- Exercise3
+- Exercise4
+- Exercise5
+- Exercise6
+- Exercise7
+- Exercise8
+- Exercise9
