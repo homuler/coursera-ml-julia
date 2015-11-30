@@ -52,7 +52,7 @@ legend(["Admitted", "Not admitted"])
 hold(false)
 
 @printf("Program paused. Press enter to continue.\n")
-#readline()
+readline()
 
 
 ## ============ Part 2: Compute Cost and Gradient ============
@@ -74,10 +74,10 @@ cost, grad = costFunction(initial_theta, X, y)
 
 @printf("Cost at initial theta (zeros): %f\n", cost)
 @printf("Gradient at initial theta (zeros): \n")
-@printf(" %f \n", grad)
+@printf("%s", join(map(x -> @sprintf(" %f ", x), grad), "\n"))
 
 @printf("\nProgram paused. Press enter to continue.\n")
-#readline()
+readline()
 
 
 ## ============= Part 3: Optimizing using fminunc  =============
@@ -93,9 +93,9 @@ min_objective!(options, (theta, grad) -> costFunction(theta, X, y)[1])
 (cost, theta, _) = optimize(options, initial_theta)
 
 # Print theta to screen
-@printf("Cost at theta found by fminunc: %f\n", cost)
+@printf("Cost at theta found by optimize: %f\n", cost)
 @printf("theta: \n")
-@printf("%s", join(map(x -> @sprintf(" %f \n", x), theta), ""))
+@printf("%s", join(map(x -> @sprintf(" %f ", x), theta), "\n"))
 
 # Plot Boundary
 plotDecisionBoundary(theta, X, y)
