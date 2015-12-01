@@ -3,3 +3,6 @@ Requests
 JSON
 PyPlot
 NLopt
+PyCall
+Images
+ImageView
