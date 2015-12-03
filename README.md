@@ -26,6 +26,7 @@ julia> submit()
 - Exercise4
   - fmincg.jl
 - Exercise5
+  - fmincg.jl
 - Exercise6
 - Exercise7
 - Exercise8
