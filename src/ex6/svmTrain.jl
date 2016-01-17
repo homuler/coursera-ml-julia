@@ -12,7 +12,7 @@ using SVMModel
     floating point numbers. max_passes controls the number of iterations
     over the dataset (without changes to alpha) before the algorithm quits.
 """ ->
-function svmTrain(X, y, C, kernelFunction, tol, max_passes)
+function svmTrain(X, y, C, kernelFunction, tol=1e-3, max_passes=5)
   # Note: This is a simplified version of the SMO algorithm for training
   #       SVMs. In practice, if you want to train an SVM classifier, we
   #       recommend using an optimized package such as:
@@ -20,9 +20,6 @@ function svmTrain(X, y, C, kernelFunction, tol, max_passes)
   #           LIBSVM   (http://www.csie.ntu.edu.tw/~cjlin/libsvm/)
   #           SVMLight (http://svmlight.joachims.org/)
   #
-
-  tol = 1e-3
-  max_passes = 5
 
   # Data parameters
   m = size(X, 1)
@@ -41,6 +38,9 @@ function svmTrain(X, y, C, kernelFunction, tol, max_passes)
   L = 0
   H = 0
 
+  println("svmTrain.jl")
+  println(sizeof(X))
+  println(sizeof(y))
   # Pre-compute the Kernel Matrix since our dataset is small
   # (in practice, optimized SVM packages that handle large datasets
   #  gracefully will _not_ do this)
@@ -55,9 +55,12 @@ function svmTrain(X, y, C, kernelFunction, tol, max_passes)
   elseif contains(@sprintf("%s", kernelFunction), "gaussianKernel")
     # Vectorized RBF Kernel
     # This is equivalent to computing the kernel on every pair of examples
+    println("gaussianKernel")
     X2 = sum(X .^ 2, 2)
-    K = X2 + X2' - 2 * (X * X')
+    println(size(X), size(X2))
+    K = X2 .+ (X2' .- 2 * (X * X'))
     K = kernelFunction(1, 0) .^ K
+    println(size(K))
   else
     # Pre-compute the Kernel Matrix
     # The following can be slow due to the lack of vectorization

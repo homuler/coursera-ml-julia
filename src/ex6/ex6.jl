@@ -27,6 +27,7 @@ include("svmTrain.jl")
 include("linearKernel.jl")
 include("visualizeBoundaryLinear.jl")
 include("gaussianKernel.jl")
+include("visualizeBoundary.jl")
 
 ## =============== Part 1: Loading and Visualizing Data ================
 #  We start the exercise by first loading and visualizing the dataset.
@@ -98,7 +99,7 @@ readline()
 data = si.loadmat("ex6data2.mat")
 
 X = data["X"]
-y = data["y"]
+y = convert(Array{Int8, 2}, data["y"])
 
 # Plot training data
 plotData(X, y)
@@ -122,8 +123,13 @@ sigma = 0.1
 # We set the tolerance and max_passes lower here so that the code will run
 # faster. However, in practice, you will want to run the training to
 # convergence.
-model= svmTrain(X, y, C, @(x1, x2) gaussianKernel(x1, x2, sigma))
-visualizeBoundary(X, y, model)
+function gaussianKernelLambda(x1, x2)
+  gaussianKernel(x1, x2, sigma)
+end
+
+model= svmTrain(X, y, C, gaussianKernelLambda)
+# It doesn't work now...
+# visualizeBoundary(X, y, model)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -140,6 +146,10 @@ readline()
 data = si.loadmat("ex6data3.mat")
 X = data["X"]
 y = data["y"]
+y = convert(Array{Int8, 2}, data["y"])
+
+Xval = data["Xval"]
+yval = data["yval"]
 
 # Plot training data
 plotData(X, y)
@@ -160,8 +170,9 @@ readline()
 C, sigma = dataset3Params(X, y, Xval, yval)
 
 # Train the SVM
-model= svmTrain(X, y, C, @(x1, x2) gaussianKernel(x1, x2, sigma));
-visualizeBoundary(X, y, model)
+model= svmTrain(X, y, C, gaussianKernelLambda)
+# It doesn't work now...
+# visualizeBoundary(X, y, model)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
