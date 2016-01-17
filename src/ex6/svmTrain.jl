@@ -38,9 +38,6 @@ function svmTrain(X, y, C, kernelFunction, tol=1e-3, max_passes=5)
   L = 0
   H = 0
 
-  println("svmTrain.jl")
-  println(sizeof(X))
-  println(sizeof(y))
   # Pre-compute the Kernel Matrix since our dataset is small
   # (in practice, optimized SVM packages that handle large datasets
   #  gracefully will _not_ do this)
@@ -55,12 +52,9 @@ function svmTrain(X, y, C, kernelFunction, tol=1e-3, max_passes=5)
   elseif contains(@sprintf("%s", kernelFunction), "gaussianKernel")
     # Vectorized RBF Kernel
     # This is equivalent to computing the kernel on every pair of examples
-    println("gaussianKernel")
     X2 = sum(X .^ 2, 2)
-    println(size(X), size(X2))
     K = X2 .+ (X2' .- 2 * (X * X'))
     K = kernelFunction(1, 0) .^ K
-    println(size(K))
   else
     # Pre-compute the Kernel Matrix
     # The following can be slow due to the lack of vectorization

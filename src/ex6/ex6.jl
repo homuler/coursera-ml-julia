@@ -28,6 +28,7 @@ include("linearKernel.jl")
 include("visualizeBoundaryLinear.jl")
 include("gaussianKernel.jl")
 include("visualizeBoundary.jl")
+include("dataset3Params.jl")
 
 ## =============== Part 1: Loading and Visualizing Data ================
 #  We start the exercise by first loading and visualizing the dataset.
@@ -145,11 +146,10 @@ readline()
 # You will have X, y in your environment
 data = si.loadmat("ex6data3.mat")
 X = data["X"]
-y = data["y"]
 y = convert(Array{Int8, 2}, data["y"])
 
 Xval = data["Xval"]
-yval = data["yval"]
+yval = convert(Array{Int8, 2}, data["yval"])
 
 # Plot training data
 plotData(X, y)

@@ -38,7 +38,9 @@ function solver(partId)
   elseif partId == 2
     data = si.loadmat("ex6data3.mat")
     X = data["X"]
-    y = data["y"]
+    y = convert(Array{Int8, 2}, data["y"])
+    Xval = data["Xval"]
+    yval = convert(Array{Int8, 2}, data["yval"])
 
     C, sigma = dataset3Params(X, y, Xval, yval)
     out = @sprintf("%0.5f ", C)
