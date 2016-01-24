@@ -5,7 +5,7 @@ Scripts for [Coursera Stanford Machine Learning](https://www.coursera.org/learn/
 As to exercises, this repository has only mock methods, so you should implement those first, and then submit the solutions.
 
 ## Requirements
-Julia v1.4.x
+Julia v0.4.x
 scipy (to read .mat files)
 
 You should also install some Julia libraries, as written in [REQUIRE](https://github.com/homuler/coursera-ml-julia/blob/master/REQUIRE).
@@ -28,5 +28,7 @@ julia> submit()
 - Exercise5
   - fmincg.jl
 - Exercise6
+  - visualizeBoundary.jl
+  - porterStemmer.jl (bug fix)
 - Exercise7
 - Exercise8
