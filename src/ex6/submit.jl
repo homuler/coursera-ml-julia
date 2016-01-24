@@ -47,6 +47,7 @@ function solver(partId)
     return out * @sprintf("%0.5f ", sigma)
   elseif partId == 3
     word_indices = processEmail(ec)
+    println(join(map(x -> @sprintf("%d ", x), word_indices), " "))
     return join(map(x -> @sprintf("%d ", x), word_indices), " ")
   elseif partId == 4
     x = emailFeatures(wi)
