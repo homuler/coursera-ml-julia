@@ -19,13 +19,10 @@
 #
 
 ## Initialization
-using PyCall
+push!(LOAD_PATH, ".")
 
-include("findClosestCentroids.jl")
-include("computeCentroids.jl")
-include("runkMeans.jl")
-include("plotProgresskMeans.jl")
-include("kMeansInitCentroids.jl")
+using PyCall, Images, Colors, kMeans
+using ImageView: load, separate, canvasgrid, view
 
 @pyimport scipy.io as si
 
@@ -114,7 +111,7 @@ readline()
 @printf("\nRunning K-Means clustering on pixels from an image.\n\n")
 
 #  Load an image of a bird
-A = imread("bird_small.png")
+A = load("bird_small.png")
 
 # If imread does not work for you, you can try instead
 data = si.loadmat("bird_small.mat")
@@ -127,7 +124,7 @@ img_size = size(A)
 # Reshape the image into an Nx3 matrix where N = number of pixels.
 # Each row will contain the Red, Green and Blue pixel values
 # This gives us our dataset matrix X that we will use K-Means on.
-X = reshape(A, img_size[1] * img_size[2], 3)
+X = reshape(separate(A), img_size[1] * img_size[2], 3)
 
 # Run your K-Means algorithm on this data
 # You should try different values of K and max_iters here
@@ -168,15 +165,16 @@ X_recovered = centroids[idx, :]
 X_recovered = reshape(X_recovered, img_size[1], img_size[2], 3)
 
 # Display the original image
-subplot(1, 2, 1)
-imagesc(A)
-title("Original")
+c = canvasgrid(1, 2)
+opts = Dict(:pixelspacing => [2, 2])
+A_recovered = convert(Image{RGB}, X_recovered .* 255)
 
+imgc1, img1 = view(c[1, 1], A .* 255; opts...)
+imgc2, img2 = view(c[1, 2], A_recovered; opts...)
+
+ImageView.annotate!(imgc1, img1, ImageView.AnnotationText(10, 5, "Original", fontsize=3))
+ImageView.annotate!(imgc2, img2, ImageView.AnnotationText(30, 5, @sprintf("Compressed, with %d colors.", K), fontsize=3))
 # Display compressed image side by side
-subplot(1, 2, 2)
-imagesc(X_recovered)
-title(@sprintf("Compressed, with %d colors.", K))
-
 
 @printf("Program paused. Press enter to continue.\n")
 readline()

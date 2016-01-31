@@ -1,5 +1,3 @@
-using PyPlot
-
 include("plotProgresskMeans.jl")
 include("findClosestCentroids.jl")
 include("computeCentroids.jl")
@@ -19,17 +17,14 @@ include("computeCentroids.jl")
 """ ->
 function runkMeans(X, initial_centroids,max_iters, plot_progress = false)
 
-  # Plot the data if we are plotting progress
-  if plot_progress
-    figure()
-    hold(true)
-  end
-
   # Initialize values
   m, n = size(X)
   K = size(initial_centroids, 1)
   centroids = initial_centroids
-  previous_centroids = centroids
+  previous_centroids = []
+  for i = 1:K
+    push!(previous_centroids, centroids[i, :])
+  end
   idx = zeros(m, 1)
 
   # Run K-Means
@@ -38,23 +33,22 @@ function runkMeans(X, initial_centroids,max_iters, plot_progress = false)
     @printf("K-Means iteration %d/%d...\n", i, max_iters)
 
     # For each example in X, assign it to the closest centroid
-    idx = findClosestCentroids(X, centroids);
+    idx = findClosestCentroids(X, centroids)
 
     # Optionally, plot progress here
     if plot_progress
-      #plotProgresskMeans(X, centroids, previous_centroids, idx, K, i)
-      #previous_centroids = centroids
-      #@printf("Press enter to continue.\n")
-      #readline()
+      plotProgresskMeans(X, centroids, previous_centroids, idx, K, i)
+
+      for i = 1:size(centroids, 1)
+        previous_centroids[i] = [previous_centroids[i]; centroids[i, :]]
+      end
+
+      @printf("Press enter to continue.\n")
+      readline()
     end
 
     # Given the memberships, compute new centroids
     centroids = computeCentroids(X, idx, K)
-  end
-
-  # Hold off if we are plotting progress
-  if plot_progress
-    hold(false)
   end
 
   return (centroids, idx)

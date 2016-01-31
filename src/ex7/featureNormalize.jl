@@ -7,10 +7,10 @@
 """ ->
 function featureNormalize(X)
 
-  mu = mean(X)
+  mu = mean(X, 1)
   X_norm = X .- mu
 
-  sigma = std(X_norm)
+  sigma = std(X_norm, 1)
   X_norm = X_norm ./ sigma
 
   return (X_norm, mu, sigma)

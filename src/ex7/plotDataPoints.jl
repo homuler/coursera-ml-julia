@@ -1,4 +1,4 @@
-using PyPlot
+using Gadfly, DataFrames
 
 @doc """
   PLOTDATAPOINTS plots data points in X, coloring them so that those with the same
@@ -8,11 +8,15 @@ using PyPlot
 """ ->
 function plotDataPoints(X, idx, K)
 
-  # Create palette
-  display(hsv)
-  palette = get_cmap("hsv", K + 1)
-  # colors = palette[idx, :]
-
+  colors = Scale.color_discrete().f(K)
   # Plot the data
-  scatter(X[:, 1], X[:, 2], 15, cmap=palette)
+  df = convert(DataFrame, [X idx])
+
+  ls = []
+
+  for sg in groupby(df, :x3)
+    l = layer(sg, x="x1", y="x2", Theme(default_color=colors[convert(Int32, sg[:x3][1])]), Geom.point)
+    push!(ls, l)
+  end
+  return ls
 end
