@@ -29,6 +29,7 @@ julia> submit()
   - fmincg.jl
 - Exercise6
   - visualizeBoundary.jl
-  - porterStemmer.jl (bug fix)
+  - porterStemmer.jl
 - Exercise7
+  - displayData.jl
 - Exercise8

@@ -19,17 +19,14 @@
 #
 
 ## Initialization
-using PyCall, PyPlot
+push!(LOAD_PATH, ".")
 
-@pyimport scipy.io as si
+using PyCall, Gadfly, PCA, kMeans
+using ImageView: load
 
 include("featureNormalize.jl")
-include("pca.jl")
-include("projectData.jl")
-include("recoverData.jl")
-include("displayData.jl")
-include("kMeansInitCentroids.jl")
-include("runkMeans.jl")
+
+@pyimport scipy.io as si
 
 ## ================== Part 1: Load Example Dataset  ===================
 #  We start this exercise by using a small dataset that is easily to
@@ -43,9 +40,10 @@ data = si.loadmat("ex7data1.mat")
 X = data["X"]
 
 #  Visualize the example dataset
-#plot(X[:, 1], X[:, 2], marker='o', color='b')
-#axis([0.5 6.5 2 8])
-#axis("equal")
+l1 = layer(x=X[:, 1], y=X[:, 2], Theme(default_color=colorant"blue"), Geom.point)
+
+p1 = plot(l1, Stat.xticks(ticks=[0.5 6.5]), Stat.yticks(ticks=[2 8]), Guide.xlabel("equal"))
+draw(SVGJS("ex7-pca-dataset.js.svg", 5inch, 5inch), p1)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -67,11 +65,13 @@ U, S = pca(X_norm)
 
 #  Draw the eigenvectors centered at mean of data. These lines show the
 #  directions of maximum variations in the dataset.
+ps1 = [mu; mu + 1.5 * S[1, 1] * U[:, 1]']
+ps2 = [mu; mu + 1.5 * S[2, 2] * U[:, 2]']
 
-#hold(true)
-#drawLine(mu, mu + 1.5 * S(1,1) * U(:,1)', '-k', 'LineWidth', 2);
-#drawLine(mu, mu + 1.5 * S(2,2) * U(:,2)', '-k', 'LineWidth', 2);
-#hold(false)
+l2 = layer(x=ps1[:, 1], y=ps1[:, 2], Theme(default_color=colorant"black", line_width=2px), Geom.line)
+l3 = layer(x=ps2[:, 1], y=ps2[:, 2], Theme(default_color=colorant"black", line_width=2px), Geom.line)
+p2 = plot(l1, l2, l3, Guide.xlabel("equal"))
+draw(SVGJS("ex7-pca-dataset.js.svg", 5inch, 5inch), p2)
 
 @printf("Top eigenvector: \n")
 @printf(" U(:,1) = %f %f \n", U[1, 1], U[2, 1])
@@ -92,9 +92,9 @@ readline()
 @printf("\nDimension reduction on example dataset.\n\n")
 
 #  Plot the normalized dataset (returned from pca)
-#plot(X[:, 1], X[:, 2], marker='o', color='b')
-#axis([-4 3 -4 3])
-#axis("equal")
+l1 = layer(x=X[:, 1], y=X[:, 2], Theme(default_color=colorant"blue"), Geom.point)
+p1 = plot(l1, Stat.xticks(ticks=[-4, 3]), Stat.yticks(ticks=[-4, 3]), Guide.xlabel("equal"))
+draw(SVGJS("ex7-pca-dataset.js.svg", 5inch, 5inch), p1)
 
 #  Project the data onto K = 1 dimension
 K = 1
@@ -107,13 +107,20 @@ X_rec  = recoverData(Z, U, K)
 @printf("\n(this value should be about  -1.047419 -1.047419)\n\n")
 
 #  Draw lines connecting the projected points to the original points
-#hold(true)
-#plot(X_rec[:, 1], X_rec[:, 2], marker='o', color='r')
-#for i = 1:size(X_norm, 1)
-#    drawLine(X_norm[i, :], X_rec[i, :], '--k', 'LineWidth', 1)
-#end
-#hold(false)
 
+l2 = layer(x=X_rec[:, 1], y=X_rec[:, 2], Theme(default_color=colorant"red"), Geom.point)
+ls = []
+push!(ls, l2)
+for i = 1:size(X_norm, 1)
+  ps = [X_norm[i, :]; X_rec[i, :]]
+  push!(ls, layer(x=ps[:, 1], y=ps[:, 2],
+          Theme(default_color=colorant"blue"), Geom.point))
+
+  push!(ls, layer(x=ps[:, 1], y=ps[:, 2],
+          Theme(default_color=colorant"black", line_width=1px), Geom.line))
+end
+p2 = plot(ls...)
+draw(SVGJS("ex7-pca-dataset.js.svg", 5inch, 5inch), p2)
 @printf("Program paused. Press enter to continue.\n")
 readline()
 
@@ -202,14 +209,14 @@ readline()
 
 # Re-load the image from the previous exercise and run K-Means on it
 # For this to work, you need to complete the K-Means assignment first
-A = imread("bird_small.png")
+A = load("bird_small.png")
 
 # If imread does not work for you, you can try instead
 #   load ('bird_small.mat');
 
 A = A / 255
 img_size = size(A)
-X = reshape(A, img_size[1] * img_size[2], 3)
+X = reshape(separate(A), img_size[1] * img_size[2], 3)
 K = 16
 max_iters = 10
 initial_centroids = kMeansInitCentroids(X, K)
