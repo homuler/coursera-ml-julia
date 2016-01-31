@@ -1,6 +1,8 @@
 using PyPlot
 
 include("plotProgresskMeans.jl")
+include("findClosestCentroids.jl")
+include("computeCentroids.jl")
 
 @doc """
   RUNKMEANS runs the K-Means algorithm on data matrix X, where each row of X
