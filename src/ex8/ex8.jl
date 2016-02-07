@@ -41,8 +41,12 @@ Xval = data["Xval"]
 yval = data["yval"]
 
 #  Visualize the example dataset
-plot(x=X[:, 1], y=X[:, 2], Geom.point, Guide.xlabel("Latency (ms)"), Guide.ylabel("Throughput (mb/s)"),
+l1 = layer(x=X[:, 1], y=X[:, 2], Geom.point)
+
+p1 = plot(l1, Guide.xlabel("Latency (ms)"), Guide.ylabel("Throughput (mb/s)"),
   Stat.xticks(ticks=collect(0:5:30)), Stat.yticks(ticks=collect(0:5:30)))
+
+draw(SVGJS("ex8-dataset.js.svg", 10inch, 6inch), p1)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -66,9 +70,9 @@ mu, sigma2 = estimateGaussian(X)
 p = multivariateGaussian(X, mu, sigma2)
 
 #  Visualize the fit
-#visualizeFit(X,  mu, sigma2)
-#xlabel('Latency (ms)');
-#ylabel('Throughput (mb/s)');
+ls = visualizeFit(X,  mu, sigma2)
+p2 = plot(ls..., Guide.xlabel("Latency (ms)"), Guide.ylabel("Throughput (mb/s)"))
+draw(SVGJS("ex8-anomaly-detection.js.svg", 10inch, 6inch), p2)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -86,12 +90,13 @@ epsilon, F1 = selectThreshold(yval, pval)
 @printf("   (you should see a value epsilon of about 8.99e-05)\n\n")
 
 #  Find the outliers in the training set and plot the
-#outliers = find(p < epsilon)
+outliers = find(p .< epsilon)
 
 #  Draw a red circle around those outliers
-#hold on
-#plot(X(outliers, 1), X(outliers, 2), 'ro', 'LineWidth', 2, 'MarkerSize', 10);
-#hold off
+l3 = layer(x=X[outliers, 1], y=X[outliers, 2], Geom.point, Theme(default_color=colorant"red", default_point_size=4pt))
+push!(ls, l3)
+p3 = plot(ls..., Guide.xlabel("Latency (ms)"), Guide.ylabel("Throughput (mb/s)"))
+draw(SVGJS("ex8-anomaly-detection.js.svg", 10inch, 6inch), p3)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
