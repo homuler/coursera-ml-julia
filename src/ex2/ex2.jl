@@ -17,14 +17,10 @@
 
 
 ## Initialization
-using PyPlot
-using NLopt
+push!(LOAD_PATH, ".")
 
-include("plotData.jl")
-include("costFunction.jl")
-include("plotDecisionBoundary.jl")
-include("sigmoid.jl")
-include("predict.jl")
+using Gadfly, NLopt, LogisticRegression
+
 ## Load Data
 #  The first two columns contains the exam scores and the third column
 #  contains the label.
@@ -37,19 +33,12 @@ y = data[:, 3]
 #  We start the exercise by first plotting the data to understand the
 #  the problem we are working with.
 
-@printf("Plotting data with + indicating (y = 1) examples and o indicating (y = 0) examples.\n")
+println("Plotting data with + indicating (y = 1) examples and o indicating (y = 0) examples.\n")
 
-plotData(X, y)
-
-# Put some labels
-hold(true)
-# Labels and Legend
-xlabel("Exam 1 score")
-ylabel("Exam 2 score")
-
-# Specified in plot order
-legend(["Admitted", "Not admitted"])
-hold(false)
+l1 = plotData(X, y)
+p1 = plot(l1, Guide.xlabel("Exam 1 score"), Guide.ylabel("Exam 2 score"),
+            Stat.xticks(ticks=collect(30:10:100)), Stat.yticks(ticks=collect(30:10:100)))
+draw(SVGJS("ex2-dataset.js.svg", 8inch, 6inch), p1)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -58,7 +47,7 @@ readline()
 ## ============ Part 2: Compute Cost and Gradient ============
 #  In this part of the exercise, you will implement the cost and gradient
 #  for logistic regression. You neeed to complete the code in
-#  costFunction.m
+#  costFunction.jl
 
 #  Setup the data matrix appropriately, and add ones for the intercept term
 m, n = size(X)
@@ -85,7 +74,6 @@ readline()
 #  optimal parameters theta.
 
 #  Set options for fminunc
-#options = optimset("GradObj", "on", "MaxIter", 400)
 options = Opt(:LN_NELDERMEAD, n+1)
 min_objective!(options, (theta, grad) -> costFunction(theta, X, y)[1])
 maxeval!(options, 400)
@@ -99,20 +87,14 @@ maxeval!(options, 400)
 @printf("%s\n", join(map(x -> @sprintf(" %f ", x), theta), "\n"))
 
 # Plot Boundary
-plotDecisionBoundary(theta, X, y)
+ls = plotDecisionBoundary(theta, X, y)
 
-# Put some labels
-hold(true)
-# Labels and Legend
-xlabel("Exam 1 score")
-ylabel("Exam 2 score")
-
-# Specified in plot order
-legend(["Regression", "Admitted", "Not admitted"])
-hold(false)
+p2 = plot(ls..., Stat.xticks(ticks=collect(30:10:100)), Stat.yticks(ticks=collect(30:10:100)),
+      Guide.xlabel("Exam 1 score"), Guide.ylabel("Exam 2 score"))
+draw(SVGJS("ex2-logistic-regression.js.svg", 8inch, 6inch), p2)
 
 @printf("\nProgram paused. Press enter to continue.\n")
-#readline()
+readline()
 
 ## ============== Part 4: Predict and Accuracies ==============
 #  After learning the parameters, you'll like to use it to predict the outcomes

@@ -1,3 +1,5 @@
+using Gadfly
+
 include("plotData.jl")
 
 @doc """
@@ -12,8 +14,9 @@ include("plotData.jl")
 """ ->
 function plotDecisionBoundary(theta, X, y)
   # Plot Data
-  plotData(X[:, 2:3], y)
-  hold(true)
+  ls = []
+  l1 = plotData(X[:, 2:3], y)
+  push!(ls, l1)
 
   if size(X, 2) <= 3
     # Only need 2 points to define a line, so choose two endpoints
@@ -23,12 +26,8 @@ function plotDecisionBoundary(theta, X, y)
     plot_y = (-1./theta[3]).*(theta[2].*plot_x + theta[1])
 
     # Plot, and adjust axes for better viewing
-    plot(plot_x, plot_y)
-
-    # Legend, specific for the exercise
-    # legend("Admitted", "Not admitted", "Decision Boundary")
-    legend("Admitted", "Not admitted")
-    axis([30, 100, 30, 100])
+    l2 = layer(x=plot_x, y=plot_y, Geom.line)
+    push!(ls, l2)
   else
     # Here is the grid range
     u = linspace(-1, 1.5, 50)
@@ -41,9 +40,14 @@ function plotDecisionBoundary(theta, X, y)
     end
     z = z' # important to transpose z before calling contour
 
+    function Zfunc(a, b)
+      return (mapFeature(a, b) * theta)[1]
+    end
     # Plot z = 0
     # Notice you need to specify the range [0, 0]
-    contour(u, v, z, [0, 0], linewidth=2)
+    l2 = layer(x=u, y=v, z=Zfunc, Theme(line_width=2pt), Geom.contour)
+    push!(ls, l2)
   end
-  hold(false)
+
+  return ls
 end
