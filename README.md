@@ -35,4 +35,3 @@ julia> submit()
   - displayData.jl
 - Exercise8
   - fmincg.jl
-  - Data Visualization
