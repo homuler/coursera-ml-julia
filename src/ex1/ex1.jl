@@ -22,17 +22,13 @@
 # x refers to the population size in 10,000s
 # y refers to the profit in $10,000s
 #
+push!(LOAD_PATH, ".")
 
-using PyPlot
+using PyPlot: surf, xlabel, ylabel, ColorMap, @L_str
+using Gadfly, LinearRegression
 
 include("warmUpExercise.jl")
-include("plotData.jl")
-include("gradientDescent.jl")
-include("computeCost.jl")
-include("gradientDescentMulti.jl")
-include("computeCostMulti.jl")
-include("featureNormalize.jl")
-include("normalEqn.jl")
+
 
 ## ==================== Part 1: Basic Function ====================
 # Complete warmUpExercise.m
@@ -54,7 +50,8 @@ m = length(y) # number of training examples
 # Plot Data
 # Note: You have to complete the code in plotData.m
 
-plotData(X, y);
+l1 = plotData(X, y)
+draw(SVGJS("ex1-dataset.js.svg", 6inch, 6inch), plot(l1))
 
 @printf "Program paused. Press enter to continue.\n"
 readline()
@@ -81,10 +78,8 @@ theta = theta[1:2]
 @printf "%f %f \n" theta[1] theta[2]
 
 # Plot the linear fit
-hold(true)
-plot(X[:, 2], X*theta, linestyle="-", color="red")
-legend(["Linear regression", "Training Data"])
-hold(false) # don't overlay any more plots on this figure
+l2 = layer(x=X[:, 2], y=X*theta, Geom.line, Theme(default_color=colorant"red"))
+draw(SVGJS("ex1-linear-regression.js.svg", 6inch, 6inch), plot(l1, l2))
 
 # Predict values for population sizes of 35,000 and 70,000
 predict1 = [1 3.5] * theta
@@ -114,18 +109,18 @@ end
 # transpose J_vals before calling surf, or else the axes will be flipped
 J_vals = J_vals'
 # Surface plot
-figure()
 surf(theta0_vals, theta1_vals, J_vals, rstride=5, cstride=5, cmap=ColorMap("rainbow"))
 xlabel(L"\theta_0")
 ylabel(L"\theta_1")
-hold(false)
 
 # Contour plot
 # Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
-figure()
-contour(theta0_vals, theta1_vals, J_vals, logspace(-2, 3, 20))
-xlabel(L"\theta_0")
-ylabel(L"\theta_1")
-hold(true)
-scatter([theta[1]], [theta[2]], marker="x", s=50)
-hold(false)
+function Zfunc(a, b)
+	println(computeCost(X, y, [a; b]))
+	return computeCost(X, y, [a; b])
+end
+
+l1 = layer(x=collect(theta0_vals), y=collect(theta1_vals), z=Zfunc,
+				Geom.contour(levels=[1e3, 2e3, 3e3, 5e3, 7e3, 1e4, 2e4, 3e4, 5e4, 7e4, 1e5, 5e5, 1e6]))
+l2 = layer(x=[theta[1]], y=[theta[2]], Geom.point, Theme(default_point_size=3pt))
+draw(SVGJS("ex1-contour.js.svg", 7inch, 7inch), plot(l1, l2, Guide.xlabel("θ0"), Guide.ylabel("θ1")))
