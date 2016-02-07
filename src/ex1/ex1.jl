@@ -70,12 +70,12 @@ alpha = 0.01
 println(computeCost(X, y, theta))
 
 # run gradient descent
-theta = gradientDescent(X, y, theta, alpha, iterations)
+theta, _ = gradientDescent(X, y, theta, alpha, iterations)
 theta = theta[1:2]
 
 # print theta to screen
 @printf "Theta found by gradient descent: "
-@printf "%f %f \n" theta[1] theta[2]
+@printf("%f %f \n", theta[1], theta[2])
 
 # Plot the linear fit
 l2 = layer(x=X[:, 2], y=X*theta, Geom.line, Theme(default_color=colorant"red"))
@@ -121,6 +121,6 @@ function Zfunc(a, b)
 end
 
 l1 = layer(x=collect(theta0_vals), y=collect(theta1_vals), z=Zfunc,
-				Geom.contour(levels=[1e3, 2e3, 3e3, 5e3, 7e3, 1e4, 2e4, 3e4, 5e4, 7e4, 1e5, 5e5, 1e6]))
+				Geom.contour(levels=[1, 8, 20, 50, 80, 150, 200, 300, 400, 500, 700, 1000, 5000]))
 l2 = layer(x=[theta[1]], y=[theta[2]], Geom.point, Theme(default_point_size=3pt))
 draw(SVGJS("ex1-contour.js.svg", 7inch, 7inch), plot(l1, l2, Guide.xlabel("θ0"), Guide.ylabel("θ1")))
