@@ -27,5 +27,8 @@ function featureNormalize(X)
   # Hint: You might find the 'mean' and 'std' functions useful.
   #
 
+  mu = mean(X, 1)
+  sigma = std(X, 1)
+  X_norm = (X .- mu) ./ sigma
   return (X_norm, mu, sigma)
 end

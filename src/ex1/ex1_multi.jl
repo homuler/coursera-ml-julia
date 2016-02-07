@@ -32,8 +32,6 @@ using Gadfly, LinearRegression
 
 ## ================ Part 1: Feature Normalization ================
 
-## Clear and Close Figures
-
 @printf("Loading data ...\n")
 
 ## Load Data
@@ -105,7 +103,6 @@ println(join(map(x -> @sprintf("%f", x), theta), " "))
 # not need to be normalized.
 price = 0 # You should change this
 
-
 # ============================================================
 
 @printf("""
@@ -149,7 +146,6 @@ println(join(map(x -> @sprintf("%f", x), theta), " "))
 # Estimate the price of a 1650 sq-ft, 3 br house
 # ====================== YOUR CODE HERE ======================
 price = 0 # You should change this
-
 
 # ============================================================
 

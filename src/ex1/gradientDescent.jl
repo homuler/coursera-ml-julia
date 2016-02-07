@@ -18,7 +18,6 @@ function gradientDescent(X, y, theta, alpha, num_iters)
     # Hint: While debugging, it can be useful to print out the values
     #       of the cost function (computeCost) and gradient here.
     # ============================================================
-  
     # Save the cost J in every iteration
     J_history[iter] = computeCost(X, y, theta)
   end

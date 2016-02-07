@@ -4,12 +4,10 @@ include("../data.jl")
 include("../submit.jl")
 
 include("warmUpExercise.jl")
-include("computeCost.jl")
-include("gradientDescent.jl")
-include("featureNormalize.jl")
-include("computeCostMulti.jl")
-include("gradientDescentMulti.jl")
-include("normalEqn.jl")
+
+push!(LOAD_PATH, ".")
+
+using LinearRegression
 
 function submit()
   parts = [
@@ -23,7 +21,7 @@ function submit()
   ]
   conf = Conf("linear-regression", "Linear Regression with Multiple Variables", parts, solver)
 
-  submitWithConf(conf);
+  submitWithConf(conf)
 end
 
 function solver(partId)
@@ -37,14 +35,17 @@ function solver(partId)
   elseif partId == 2
     return @sprintf("%0.5f ", computeCost(X1, Y1, [0.5 -0.5]'))
   elseif partId == 3
-    return join(map(x -> @sprintf("%0.5f ", x), gradientDescent(X1, Y1, [0.5 -0.5]', 0.01, 10)[1:size(X1)[2]]), " ")
+    theta, _ = gradientDescent(X1, Y1, [0.5 -0.5]', 0.01, 10)
+    return join(map(x -> @sprintf("%0.5f ", x), theta), " ")
   elseif partId == 4
-    return join(map(x -> @sprintf("%0.5f ", x), featureNormalize(X2[:, 2:4]))[1:size(X2)[1], :], " ")
+    X_norm, _, _ = featureNormalize(X2[:, 2:4])
+    return join(map(x -> @sprintf("%0.5f ", x), X_norm), " ")
   elseif partId == 5
-    return @sprintf("%0.5f ", computeCostMulti(X2, Y2, [0.1 0.2 0.3 0.4]'));
+    return @sprintf("%0.5f ", computeCostMulti(X2, Y2, [0.1 0.2 0.3 0.4]'))
   elseif partId == 6
-    return join(map(x -> @sprintf("%0.5f ", x), gradientDescentMulti(X2, Y2, [-0.1 -0.2 -0.3 -0.4]', 0.01, 10)[1:size(X2)[2]]), " ");
+    theta, _ = gradientDescentMulti(X2, Y2, [-0.1 -0.2 -0.3 -0.4]', 0.01, 10)
+    return join(map(x -> @sprintf("%0.5f ", x), theta), " ")
   elseif partId == 7
-    return join(map(x -> @sprintf("%0.5f ", x), normalEqn(X2, Y2)), " ");
+    return join(map(x -> @sprintf("%0.5f ", x), normalEqn(X2, Y2)), " ")
   end
 end
