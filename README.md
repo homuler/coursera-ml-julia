@@ -21,6 +21,7 @@ julia> submit()
 
 ## ToDo
 - Fix comments for Julia
+- Migrate from PyPlot to Gadfly
 - Exercise1
   - ex1_m.jl
 - Exercise4
@@ -33,3 +34,5 @@ julia> submit()
 - Exercise7
   - displayData.jl
 - Exercise8
+  - fmincg.jl
+  - Data Visualization
