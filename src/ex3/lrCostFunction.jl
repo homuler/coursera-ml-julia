@@ -1,3 +1,5 @@
+include("sigmoid.jl")
+
 @doc """
   LRCOSTFUNCTION Compute cost and gradient for logistic regression with
   regularization
@@ -38,7 +40,5 @@ function lrCostFunction(theta, X, y, lambda)
   #           grad = grad + YOUR_CODE_HERE (using the temp variable)
   #
   # =============================================================
-
-  grad = grad[:]
   return (J, grad)
 end

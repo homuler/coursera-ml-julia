@@ -85,7 +85,7 @@ readline()
 #  Randomly permute examples
 rp = randperm(m)
 
-for i in 1:10
+for i in 1:5
     # Display
     @printf("\nDisplaying Example Image\n")
     displayData(X[rp[i], :])

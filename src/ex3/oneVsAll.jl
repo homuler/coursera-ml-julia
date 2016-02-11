@@ -1,3 +1,7 @@
+using NLopt
+
+include("lrCostFunction.jl")
+
 @doc """
   ONEVSALL trains multiple logistic regression classifiers and returns all
   the classifiers in a matrix all_theta, where the i-th row of all_theta
