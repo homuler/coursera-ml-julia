@@ -16,17 +16,13 @@
 #
 
 ## Initialization
+push!(LOAD_PATH, ".")
 
-using PyCall, NLopt
+using PyCall, NLopt, NeuralNetwork
 
 @pyimport scipy.io as si
 
 include("displayData.jl")
-include("nnCostFunction.jl")
-include("randInitializeWeights.jl")
-include("checkNNGradients.jl")
-include("predict.jl")
-# include("fmincg.jl")
 
 ## Setup the parameters you will use for this exercise
 input_layer_size  = 400  # 20x20 Input Images of Digits

@@ -19,5 +19,6 @@ function randInitializeWeights(L_in, L_out)
   # Note: The first row of W corresponds to the parameters for the bias units
   #
   # =========================================================================
+
   return W
 end

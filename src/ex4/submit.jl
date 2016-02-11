@@ -3,8 +3,9 @@ export submit
 include("../data.jl")
 include("../submit.jl")
 
-include("nnCostFunction.jl")
-include("sigmoidGradient.jl")
+push!(LOAD_PATH, ".")
+
+using NeuralNetwork
 
 function submit()
   parts = [

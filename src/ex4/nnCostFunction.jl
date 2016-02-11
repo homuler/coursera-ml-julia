@@ -1,3 +1,5 @@
+include("sigmoidGradient.jl")
+
 @doc """
   NNCOSTFUNCTION Implements the neural network cost function for a two layer
   neural network which performs classification

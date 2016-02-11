@@ -1,3 +1,5 @@
+include("sigmoid.jl")
+
 @doc """
   SIGMOIDGRADIENT returns the gradient of the sigmoid function
   evaluated at z
@@ -13,5 +15,6 @@ function sigmoidGradient(z)
   # Instructions: Compute the gradient of the sigmoid function evaluated at
   #               each value of z (z can be a matrix, vector or scalar).
   # =============================================================
+
   return g
 end
