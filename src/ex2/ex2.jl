@@ -35,8 +35,8 @@ y = data[:, 3]
 
 println("Plotting data with + indicating (y = 1) examples and o indicating (y = 0) examples.\n")
 
-l1 = plotData(X, y)
-p1 = plot(l1, Guide.xlabel("Exam 1 score"), Guide.ylabel("Exam 2 score"),
+ls = plotData(X, y)
+p1 = plot(ls..., Guide.xlabel("Exam 1 score"), Guide.ylabel("Exam 2 score"),
             Stat.xticks(ticks=collect(30:10:100)), Stat.yticks(ticks=collect(30:10:100)))
 draw(SVGJS("ex2-dataset.js.svg", 8inch, 6inch), p1)
 
