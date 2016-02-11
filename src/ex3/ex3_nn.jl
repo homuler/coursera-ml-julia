@@ -7,10 +7,10 @@
 #  linear exercise. You will need to complete the following functions
 #  in this exericse:
 #
-#     lrCostFunction.m (logistic regression cost function)
-#     oneVsAll.m
-#     predictOneVsAll.m
-#     predict.m
+#     lrCostFunction.jl (logistic regression cost function)
+#     oneVsAll.jl
+#     predictOneVsAll.jl
+#     predict.jl
 #
 #  For this exercise, you will not need to change any code in this file,
 #  or any other files other than those mentioned above.
@@ -18,12 +18,13 @@
 
 ## Initialization
 
-using PyPlot, PyCall
+push!(LOAD_PATH, ".")
+
+using PyCall, MultiClassClassification
 
 @pyimport scipy.io as si
 
 include("displayData.jl")
-include("predict.jl")
 
 ## Setup the parameters you will use for this exercise
 input_layer_size  = 400  # 20x20 Input Images of Digits
@@ -84,7 +85,7 @@ readline()
 #  Randomly permute examples
 rp = randperm(m)
 
-for i in 1:m
+for i in 1:10
     # Display
     @printf("\nDisplaying Example Image\n")
     displayData(X[rp[i], :])

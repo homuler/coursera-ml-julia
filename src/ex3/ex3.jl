@@ -18,13 +18,13 @@
 
 ## Initialization
 
-using PyPlot, PyCall
+push!(LOAD_PATH, ".")
+
+using PyCall, MultiClassClassification
 
 @pyimport scipy.io as si
 
 include("displayData.jl")
-include("oneVsAll.jl")
-include("predictOneVsAll.jl")
 
 ## Setup the parameters you will use for this part of the exercise
 input_layer_size  = 400  # 20x20 Input Images of Digits

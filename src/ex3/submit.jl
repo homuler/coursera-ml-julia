@@ -3,10 +3,9 @@ export submit
 include("../data.jl")
 include("../submit.jl")
 
-include("lrCostFunction.jl")
-include("oneVsAll.jl")
-include("predictOneVsAll.jl")
-include("predict.jl")
+push!(LOAD_PATH, ".")
+
+using MultiClassClassification
 
 function submit()
   parts = [
