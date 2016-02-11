@@ -13,6 +13,8 @@ function plotData(X, y)
   #               examples and 'ko' for the negative examples.
   #
   # =========================================================================
-
-  return layer(x=X[:, 1], y=X[:, 2], Geom.point)
+  ls = []
+  l1 = layer(x=X[:, 1], y=X[:, 2], Geom.point)
+  push!(ls, l1)
+  return ls
 end

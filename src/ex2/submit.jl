@@ -3,10 +3,9 @@ export submit
 include("../data.jl")
 include("../submit.jl")
 
-include("sigmoid.jl")
-include("costFunction.jl")
-include("predict.jl")
-include("costFunctionReg.jl")
+push!(LOAD_PATH, ".")
+
+using LogisticRegression
 
 function submit()
   parts = [

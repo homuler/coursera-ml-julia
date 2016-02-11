@@ -18,16 +18,9 @@
 #
 
 ## Initialization
+push!(LOAD_PATH, ".")
 
-using PyPlot
-using NLopt
-
-include("plotData.jl")
-include("costFunctionReg.jl")
-include("plotDecisionBoundary.jl")
-include("sigmoid.jl")
-include("predict.jl")
-include("mapFeature.jl")
+using Gadfly, NLopt, LogisticRegression
 
 ## Load Data
 #  The first two columns contains the X values and the third column
@@ -37,18 +30,11 @@ data = readcsv("ex2data2.txt")
 X = data[:, [1, 2]]
 y = data[:, 3]
 
-plotData(X, y)
-
-# Put some labels
-hold(true)
+ls = plotData(X, y)
 
 # Labels and Legend
-xlabel("Microchip Test 1")
-ylabel("Microchip Test 2")
-
-# Specified in plot order
-legend(["y = 1", "y = 0"])
-hold(false)
+p1 = plot(ls..., Guide.xlabel("Microchip Test 1"), Guide.ylabel("Microchip Test 2"), Scale.color_discrete())
+draw(SVGJS("ex2-dataset-reg.js.svg", 6inch, 6inch), p1)
 
 ## =========== Part 1: Regularized Logistic Regression ============
 #  In this part, you are given a dataset with data points that are not
@@ -107,16 +93,10 @@ maxeval!(options, 1000)
 (cost, theta, exit_flag) = optimize(options, initial_theta)
 
 # Plot Boundary
-plotDecisionBoundary(theta, X, y)
-hold(true)
-title(@sprintf("lambda = %g", lambda))
-
-# Labels and Legend
-xlabel("Microchip Test 1")
-ylabel("Microchip Test 2")
-
-legend(["y = 1", "y = 0", "Decision boundary"])
-hold(false)
+ls = plotDecisionBoundary(theta, X, y)
+p2 = plot(ls..., Guide.title(@sprintf("lambda = %d", lambda)),
+       Guide.xlabel("Microchip Test 1"), Guide.ylabel("Microchip Test 2"))
+draw(SVGJS("ex2-logistic-regression-reg.js.svg", 6inch, 6inch), p2)
 
 # Compute accuracy on our training set
 p = predict(theta, X)

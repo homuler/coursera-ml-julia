@@ -14,9 +14,7 @@ include("plotData.jl")
 """ ->
 function plotDecisionBoundary(theta, X, y)
   # Plot Data
-  ls = []
-  l1 = plotData(X[:, 2:3], y)
-  push!(ls, l1)
+  ls = plotData(X[:, 2:3], y)
 
   if size(X, 2) <= 3
     # Only need 2 points to define a line, so choose two endpoints
@@ -33,19 +31,12 @@ function plotDecisionBoundary(theta, X, y)
     u = linspace(-1, 1.5, 50)
     v = linspace(-1, 1.5, 50)
 
-    z = zeros(length(u), length(v))
-    # Evaluate z = theta*x over the grid
-    for j in 1:length(v), i in 1:length(u)
-      z[i, j] = (mapFeature([u[i]], [v[j]]) * theta)[1]
-    end
-    z = z' # important to transpose z before calling contour
-
     function Zfunc(a, b)
-      return (mapFeature(a, b) * theta)[1]
+      return (mapFeature([b], [a]) * theta)[1]
     end
+
     # Plot z = 0
-    # Notice you need to specify the range [0, 0]
-    l2 = layer(x=u, y=v, z=Zfunc, Theme(line_width=2pt), Geom.contour)
+    l2 = layer(x=u, y=v, z=Zfunc, Theme(line_width=2pt), Geom.contour(levels=[0]))
     push!(ls, l2)
   end
 
