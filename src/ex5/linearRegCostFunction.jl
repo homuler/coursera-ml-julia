@@ -21,6 +21,5 @@ function linearRegCostFunction(X, y, theta, lambda)
   #
   # =========================================================================
 
-  grad = grad[:]
   return (J, grad)
 end

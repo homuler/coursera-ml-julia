@@ -29,7 +29,7 @@ function trainLinearReg(X, y, lambda)
   # Minimize using fmincg
   # theta = fmincg(costFunction, initial_theta, options);
   min_objective!(options, costFunction)
-  (cost, theta, _) = optimize(options, initial_theta)
+  (_, theta, _) = optimize(options, initial_theta)
 
   return theta
 end

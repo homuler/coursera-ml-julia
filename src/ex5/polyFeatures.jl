@@ -13,5 +13,6 @@ function polyFeatures(X, p)
   #               column of X contains the values of X to the p-th power.
   #
   # =========================================================================
+
   return X_poly
 end

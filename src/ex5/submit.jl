@@ -3,10 +3,8 @@ export submit
 include("../data.jl")
 include("../submit.jl")
 
-include("linearRegCostFunction.jl")
-include("learningCurve.jl")
-include("polyFeatures.jl")
-include("validationCurve.jl")
+push!(LOAD_PATH, ".")
+using Regularization
 
 function submit()
   parts = [

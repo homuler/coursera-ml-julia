@@ -1,3 +1,5 @@
+include("linearRegCostFunction.jl")
+
 @doc """
   VALIDATIONCURVE Generate the train and validation errors needed to
   plot a validation curve that we can use to select lambda

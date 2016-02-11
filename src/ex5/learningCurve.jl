@@ -1,3 +1,5 @@
+include("linearRegCostFunction.jl")
+
 @doc """
   LEARNINGCURVE Generates the train and cross validation set errors needed
   to plot a learning curve
@@ -49,5 +51,6 @@ function learningCurve(X, y, Xval, yval, lambda)
   #
   #       end
   # =========================================================================
+
   return (error_train, error_val)
 end

@@ -15,23 +15,19 @@ You should also install some Julia libraries, as written in [REQUIRE](https://gi
 cd coursera-ml-julia/src/[exercise]
 julia
 
-julia> include("submit.jl")
+
+julia> include("submit.jl") # when submitting
 julia> submit()  
+
+julia> include("ex1.jl") # when running exercise scripts
+
 ```
 
 ## ToDo
 - Fix comments for Julia
-- Migrate from PyPlot to Gadfly
-- Exercise1
-  - ex1_m.jl
-- Exercise4
-  - fmincg.jl
-- Exercise5
-  - fmincg.jl
+- Migrate from PyPlot to Gadfly or Plotly
 - Exercise6
   - visualizeBoundary.jl
   - porterStemmer.jl
 - Exercise7
   - displayData.jl
-- Exercise8
-  - fmincg.jl
