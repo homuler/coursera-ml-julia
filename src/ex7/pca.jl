@@ -9,8 +9,8 @@ function pca(X)
   m, n = size(X)
 
   # You need to return the following variables correctly.
-  U = zeros(n)
-  S = zeros(n)
+  U = zeros(n, n)
+  S = zeros(n, n)
 
   # ====================== YOUR CODE HERE ======================
   # Instructions: You should first compute the covariance matrix. Then, you
