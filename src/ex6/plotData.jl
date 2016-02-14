@@ -1,4 +1,4 @@
-using PyPlot
+using Gadfly
 
 @doc """
   PLOTDATA Plots the data points X and y into a new figure
@@ -13,8 +13,11 @@ function plotData(X, y)
   neg = find(y .== 0)
 
   # Plot Examples
-  scatter(X[pos, 1], X[pos, 2], marker="+", linewidth=1, s=10)
-  hold(true)
-  scatter(X[neg, 1], X[neg, 2], marker="o", color="y", s=10)
-  hold(false)
+  ls = []
+  l1 = layer(x=X[pos, 1], y=X[pos, 2], Geom.point, Theme(default_point_size=3pt))
+  l2 = layer(x=X[neg, 1], y=X[neg, 2], Geom.point, Theme(default_point_size=3pt, default_color=colorant"yellow"))
+
+  push!(ls, l1)
+  push!(ls, l2)
+  return ls
 end

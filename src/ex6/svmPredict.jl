@@ -39,11 +39,6 @@ function svmPredict(model, X)
     for i = 1:m
       prediction = 0
       for j = 1:size(model.X, 1)
-        print("type1 ")
-        print(size(X[i, :]'))
-        print("\ntype2 ")
-        print(size(model.X[j, :]'))
-        print("\n")
         v = model.kernelFunction(X[i, :]', model.X[j, :]')
         prediction +=
           model.alphas[j] * model.y[j] * v

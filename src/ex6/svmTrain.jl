@@ -1,4 +1,4 @@
-using SVMModel
+include("model.jl")
 
 @doc """
   SVMTRAIN Trains an SVM classifier using a simplified version of the SMO
@@ -45,7 +45,8 @@ function svmTrain(X, y, C, kernelFunction, tol=1e-3, max_passes=5)
   # We have implemented optimized vectorized version of the Kernels here so
   # that the svm training will run faster
   K = zeros(m, m)
-  if @sprintf("%s", kernelFunction) == "linearKernel"
+
+  if @sprintf("%s", kernelFunction) == "SVM.linearKernel"
     # Vectorized computation for the Linear Kernel
     # This is equivalent to computing the kernel on every pair of examples
     K = X*X'
@@ -85,7 +86,7 @@ function svmTrain(X, y, C, kernelFunction, tol=1e-3, max_passes=5)
 
         j = convert(Int, j)
         # Calculate Ej = f(x(j)) - y(j) using (2).
-        E[j] = b + sum (alphas .* Y .* K[:, j]) - Y[j]
+        E[j] = b + sum(alphas .* Y .* K[:, j]) - Y[j]
 
         # Save old alphas
         alpha_i_old = alphas[i]
@@ -168,7 +169,7 @@ function svmTrain(X, y, C, kernelFunction, tol=1e-3, max_passes=5)
   # Save the model
   idx = alphas .> 0
 
-  model = SVMModel.Model(
+  model = SVMModel(
     X[idx, :],
     Y[idx],
     kernelFunction,

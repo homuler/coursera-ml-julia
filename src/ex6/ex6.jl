@@ -17,18 +17,15 @@
 #
 
 ## Initialization
-using PyCall, PyPlot
+push!(LOAD_PATH, ".")
+
+using PyCall, Gadfly, SVM
 
 @pyimport scipy.io as si
 
-include("model.jl")
 include("plotData.jl")
-include("svmTrain.jl")
-include("linearKernel.jl")
 include("visualizeBoundaryLinear.jl")
-include("gaussianKernel.jl")
 include("visualizeBoundary.jl")
-include("dataset3Params.jl")
 
 ## =============== Part 1: Loading and Visualizing Data ================
 #  We start the exercise by first loading and visualizing the dataset.
@@ -45,7 +42,9 @@ X = data["X"]
 y = convert(Array{Int8, 2}, data["y"])
 
 # Plot training data
-plotData(X, y)
+ls = plotData(X, y)
+p1 = plot(ls...)
+draw(SVGJS("ex6-dataset.js.svg", 6inch, 6inch), p1)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -64,7 +63,9 @@ readline()
 # boundary varies (e.g., try C = 1000)
 C = 1
 model = svmTrain(X, y, C, linearKernel, 1e-3, 20)
-visualizeBoundaryLinear(X, y, model)
+ls = visualizeBoundaryLinear(X, y, model)
+p2 = plot(ls...)
+draw(SVGJS("ex6-boundary-linear.js.svg", 6inch, 6inch), p2)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -103,7 +104,9 @@ X = data["X"]
 y = convert(Array{Int8, 2}, data["y"])
 
 # Plot training data
-plotData(X, y)
+ls = plotData(X, y)
+p3 = plot(ls...)
+draw(SVGJS("ex6-dataset2.js.svg", 6inch, 6inch), p3)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -130,7 +133,9 @@ end
 
 model= svmTrain(X, y, C, gaussianKernelLambda)
 # It doesn't work now...
-# visualizeBoundary(X, y, model)
+ls = visualizeBoundary(X, y, model)
+p4 = plot(ls...)
+draw(SVGJS("ex6-rbf-boundary.js.svg", 6inch, 6inch), p4)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -152,7 +157,9 @@ Xval = data["Xval"]
 yval = convert(Array{Int8, 2}, data["yval"])
 
 # Plot training data
-plotData(X, y)
+ls = plotData(X, y)
+p5 = plot(ls...)
+draw(SVGJS("ex6-dataset3.js.svg", 6inch, 6inch), p5)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -172,7 +179,9 @@ C, sigma = dataset3Params(X, y, Xval, yval)
 # Train the SVM
 model= svmTrain(X, y, C, gaussianKernelLambda)
 # It doesn't work now...
-# visualizeBoundary(X, y, model)
+ls = visualizeBoundary(X, y, model)
+p6 = plot(ls...)
+draw(SVGJS("ex6-rbf-boundary2.js.svg", 6inch, 6inch), p6)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()

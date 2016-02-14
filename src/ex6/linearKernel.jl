@@ -9,7 +9,7 @@ function linearKernel(x1, x2)
   x2 = x2[:]
 
   # Compute the kernel
-  sim = x1' * x2  # dot product
+  sim = vecdot(x1, x2)  # dot product
 
   return sim
 end

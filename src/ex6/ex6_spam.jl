@@ -17,18 +17,11 @@
 #
 
 ## Initialization
+push!(LOAD_PATH, ".")
 
-using PyCall
+using PyCall, SVM, Spam
 
 @pyimport scipy.io as si
-include("model.jl")
-include("linearKernel.jl")
-include("gaussianKernel.jl")
-include("dataset3Params.jl")
-include("processEmail.jl")
-include("emailFeatures.jl")
-include("getVocabList.jl")
-include("svmTrain.jl")
 
 ## ==================== Part 1: Email Preprocessing ====================
 #  To use an SVM to classify emails into Spam v.s. Non-Spam, you first need
@@ -113,7 +106,6 @@ ytest = convert(Array{Int8, 2}, data["ytest"])
 p = svmPredict(model, Xtest)
 
 @printf("Test Accuracy: %f\n", mean(p .== ytest) * 100)
-readline()
 
 
 ## ================= Part 5: Top Predictors of Spam ====================

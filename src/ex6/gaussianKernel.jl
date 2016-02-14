@@ -4,10 +4,6 @@
     and returns the value in sim
 """ ->
 function gaussianKernel(x1, x2, sigma)
-  # Ensure that x1 and x2 are column vectors
-  x1 = x1[:]
-  x2 = x2[:]
-
   # You need to return the following variables correctly.
   sim = 0
 
@@ -17,12 +13,12 @@ function gaussianKernel(x1, x2, sigma)
   #               sigma
   #
   #
-
-
-
-
-
-
   # =============================================================
+  if contains(@sprintf("%s", x1), "Array")
+    x1 = x1[:]
+    x2 = x2[:]
+  end
+
+  sim = exp(-sum(vecdot(x1 - x2, x1 - x2) / 2sigma^2))
   return sim
 end

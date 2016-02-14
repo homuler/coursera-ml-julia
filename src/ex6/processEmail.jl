@@ -57,16 +57,24 @@ function processEmail(email_contents)
   l = 0
 
   # Tokenize and also get rid of any punctuation
-  matchIter = eachmatch(r"[ @\$/#.-:&*+=\[\]?!(){},'\">_<;%\n\r]", email_contents)
+  while !isempty(email_contents)
+    regMatch = match(r"[ @\$/#.-:&*+=\[\]?!(){},'\">_<;%\n\r]", email_contents)
 
-  for imatch in matchIter
+    if regMatch != nothing
+      str = email_contents[1:regMatch.offset]
+      email_contents = email_contents[regMatch.offset+1:end]
+    else
+      email_contents = ""
+    end
+
     # Remove any non alphanumeric characters
-    str = replace(imatch.match, r"[^a-zA-Z0-9]", s"")
+    str = replace(str, r"[^a-zA-Z0-9]", s"")
 
     # Stem the word
     # (the porterStemmer sometimes has issues, so we use a try catch block)
+    # str = porterStemmer(strip(str))
     try
-      str = porterStemmer(strtrim(str))
+      str = porterStemmer(strip(str))
     catch
       str = ""
       continue
@@ -100,6 +108,10 @@ function processEmail(email_contents)
     #
     # =============================================================
 
+    xs = find(x -> x == str, vocabList)
+    if length(xs) > 0
+      push!(word_indices, xs[1])
+    end
 
     # Print to screen, ensuring that the output lines are not too long
     if (l + length(str) + 1) > 78

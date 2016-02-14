@@ -1,16 +1,13 @@
-using PyCall
-
-@pyimport scipy.io as si
-
 export submit
 
 include("../data.jl")
 include("../submit.jl")
 
-include("gaussianKernel.jl")
-include("dataset3Params.jl")
-include("processEmail.jl")
-include("emailFeatures.jl")
+push!(LOAD_PATH, ".")
+
+using PyCall, SVM, Spam
+
+@pyimport scipy.io as si
 
 function submit()
   parts = [

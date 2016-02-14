@@ -1,3 +1,5 @@
+include("svmPredict.jl")
+
 @doc """
   EX6PARAMS returns your choice of C and sigma for Part 3 of the exercise
   where you select the optimal (C, sigma) learning parameters to use for SVM
@@ -24,5 +26,28 @@ function dataset3Params(X, y, Xval, yval)
   #
   # =========================================================================
 
-  return C, sigma
+  minErr = 1
+  minC = 0
+  minSigma = 0
+  for C in [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30],
+    sigma in [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]
+
+    function gaussianKernelFunc(x1, x2)
+      gaussianKernel(x1, x2, sigma)
+    end
+
+    model = svmTrain(X, y, C, gaussianKernelFunc)
+    predictions = svmPredict(model, Xval)
+
+    error = mean(yval .!= predictions)
+    if error  < minErr
+      minErr = error
+      minC = C
+      minSigma = sigma
+      emd
+    end
+  end
+
+  println("minErr = ", minErr, ", C = ", minC, ", sigma = ", minSigma)
+  return minC, minSigma
 end

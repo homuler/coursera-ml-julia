@@ -1,4 +1,4 @@
-using PyPlot
+using Gadfly
 
 include("plotData.jl")
 
@@ -13,8 +13,9 @@ function visualizeBoundaryLinear(X, y, model)
   b = model.b
   xp = linspace(minimum(X[:, 1]), maximum(X[:, 1]), 100)
   yp = - (w[1]*xp + b)/w[2]
-  plotData(X, y)
-  hold(true)
-  plot(xp, yp, "-b")
-  hold(false)
+  ls = plotData(X, y)
+
+  l = layer(x=xp, y=yp, Geom.line, Theme(default_color=colorant"blue"))
+  push!(ls, l)
+  return ls
 end
