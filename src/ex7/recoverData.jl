@@ -22,7 +22,5 @@ function recoverData(Z, U, K)
   #               Notice that U(j, 1:K) is a row vector.
   #
   # =============================================================
-  Ureduced = U[:, 1:K]
-  X_rec = Z * Ureduced'
   return X_rec
 end

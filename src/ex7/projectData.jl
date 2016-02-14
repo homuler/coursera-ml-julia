@@ -20,7 +20,5 @@ function projectData(X, U, K)
   #
   # =============================================================
 
-  Ureduced = U[:, 1:K]
-  Z = X * Ureduced
   return Z
 end
