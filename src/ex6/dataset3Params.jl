@@ -10,8 +10,8 @@ include("svmPredict.jl")
 """ ->
 function dataset3Params(X, y, Xval, yval)
   # You need to return the following variables correctly.
-  C = 1
-  sigma = 0.3
+  minC = 1
+  minSigma = 0.3
 
   # ====================== YOUR CODE HERE ======================
   # Instructions: Fill in this function to return the optimal C and sigma
@@ -26,28 +26,5 @@ function dataset3Params(X, y, Xval, yval)
   #
   # =========================================================================
 
-  minErr = 1
-  minC = 0
-  minSigma = 0
-  for C in [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30],
-    sigma in [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]
-
-    function gaussianKernelFunc(x1, x2)
-      gaussianKernel(x1, x2, sigma)
-    end
-
-    model = svmTrain(X, y, C, gaussianKernelFunc)
-    predictions = svmPredict(model, Xval)
-
-    error = mean(yval .!= predictions)
-    if error  < minErr
-      minErr = error
-      minC = C
-      minSigma = sigma
-      emd
-    end
-  end
-
-  println("minErr = ", minErr, ", C = ", minC, ", sigma = ", minSigma)
   return minC, minSigma
 end

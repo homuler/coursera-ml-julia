@@ -48,9 +48,5 @@ function emailFeatures(word_indices)
   #              x = [ 0 0 0 0 1 0 0 0 ... 0 0 0 0 1 ... 0 0 0 1 0 ..];
   # =========================================================================
 
-  for i in word_indices
-    x[convert(Int32, i)] = 1
-  end
-
   return x
 end

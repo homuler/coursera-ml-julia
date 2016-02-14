@@ -108,11 +108,6 @@ function processEmail(email_contents)
     #
     # =============================================================
 
-    xs = find(x -> x == str, vocabList)
-    if length(xs) > 0
-      push!(word_indices, xs[1])
-    end
-
     # Print to screen, ensuring that the output lines are not too long
     if (l + length(str) + 1) > 78
       @printf("\n")
