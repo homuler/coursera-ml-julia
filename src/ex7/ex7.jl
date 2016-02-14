@@ -159,7 +159,7 @@ idx = findClosestCentroids(X, centroids)
 # We can now recover the image from the indices (idx) by mapping each pixel
 # (specified by it's index in idx) to the centroid value
 
-X_recovered = centroids[idx, :]
+X_recovered = centroids[round(Int32, idx), :]
 
 # Reshape the recovered image into proper dimensions
 X_recovered = reshape(X_recovered, img_size[1], img_size[2], 3)
