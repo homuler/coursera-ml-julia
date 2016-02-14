@@ -3,11 +3,9 @@ export submit
 include("../data.jl")
 include("../submit.jl")
 
-include("findClosestCentroids.jl")
-include("computeCentroids.jl")
-include("pca.jl")
-include("projectData.jl")
-include("recoverData.jl")
+push!(LOAD_PATH, ".")
+
+using kMeans, PCA
 
 function submit()
   parts = [
