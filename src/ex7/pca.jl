@@ -12,6 +12,9 @@ function pca(X)
   U = zeros(n)
   S = zeros(n)
 
+  cov = X' * X ./ m
+  F = svdfact(cov)
+
   # ====================== YOUR CODE HERE ======================
   # Instructions: You should first compute the covariance matrix. Then, you
   #               should use the "svd" function to compute the eigenvectors
@@ -21,5 +24,5 @@ function pca(X)
   #       number of examples).
   #
   # =========================================================================
-  return U, S
+  return F[:U], diagm(F[:S])
 end

@@ -21,10 +21,13 @@
 ## Initialization
 push!(LOAD_PATH, ".")
 
-using PyCall, Gadfly, PCA, kMeans
-using ImageView: load
+using PyCall, Gadfly, Colors, PCA, kMeans
+using ImageView: load, view, canvasgrid
+using PyPlot: scatter, figure, title
 
+include("displayData.jl")
 include("featureNormalize.jl")
+include("plotDataPoints.jl")
 
 @pyimport scipy.io as si
 
@@ -71,7 +74,7 @@ ps2 = [mu; mu + 1.5 * S[2, 2] * U[:, 2]']
 l2 = layer(x=ps1[:, 1], y=ps1[:, 2], Theme(default_color=colorant"black", line_width=2px), Geom.line)
 l3 = layer(x=ps2[:, 1], y=ps2[:, 2], Theme(default_color=colorant"black", line_width=2px), Geom.line)
 p2 = plot(l1, l2, l3, Guide.xlabel("equal"))
-draw(SVGJS("ex7-pca-dataset.js.svg", 5inch, 5inch), p2)
+draw(SVGJS("ex7-pca-eigenvector.js.svg", 5inch, 5inch), p2)
 
 @printf("Top eigenvector: \n")
 @printf(" U(:,1) = %f %f \n", U[1, 1], U[2, 1])
@@ -94,7 +97,7 @@ readline()
 #  Plot the normalized dataset (returned from pca)
 l1 = layer(x=X[:, 1], y=X[:, 2], Theme(default_color=colorant"blue"), Geom.point)
 p1 = plot(l1, Stat.xticks(ticks=[-4, 3]), Stat.yticks(ticks=[-4, 3]), Guide.xlabel("equal"))
-draw(SVGJS("ex7-pca-dataset.js.svg", 5inch, 5inch), p1)
+draw(SVGJS("ex7-pca-projections.js.svg", 5inch, 5inch), p1)
 
 #  Project the data onto K = 1 dimension
 K = 1
@@ -120,7 +123,7 @@ for i = 1:size(X_norm, 1)
           Theme(default_color=colorant"black", line_width=1px), Geom.line))
 end
 p2 = plot(ls...)
-draw(SVGJS("ex7-pca-dataset.js.svg", 5inch, 5inch), p2)
+draw(SVGJS("ex7-pca-projections.js.svg", 5inch, 5inch), p2)
 @printf("Program paused. Press enter to continue.\n")
 readline()
 
@@ -132,9 +135,13 @@ readline()
 
 #  Load Face dataset
 data = si.loadmat("ex7faces.mat")
+X = data["X"]
 
+grid = canvasgrid(2, 2)
+canvasOpts = Dict(:pixelspacing => [2, 2])
 #  Display the first 100 faces in the dataset
-# displayData(X[1:100, :])
+v = displayData(X[1:100, :])
+view(grid[1, 1], v; canvasOpts...)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -155,7 +162,8 @@ X_norm, mu, sigma = featureNormalize(X)
 U, S = pca(X_norm)
 
 #  Visualize the top 36 eigenvectors found
-# displayData(U[:, 1:36]')
+v = displayData(U[:, 1:36]')
+view(grid[1, 2], v; canvasOpts...)
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -186,16 +194,15 @@ K = 100
 X_rec  = recoverData(Z, U, K)
 
 # Display normalized data
-#subplot(1, 2, 1)
-#displayData(X_norm[1:100, :])
-#title("Original faces")
-#axis("equals")
+v = displayData(X_norm[1:100, :])
+imgc1, img1 = view(grid[2, 1], v; canvasOpts...)
+ImageView.annotate!(imgc1, img1, ImageView.AnnotationText(70, 15, "Original faces", color=RGB(1, 1, 1), fontsize=15))
+
 
 # Display reconstructed data from only k eigenfaces
-#subplot(1, 2, 2)
-#displayData(X_rec[1:100, :])
-#title("Recovered faces")
-#axis("equals")
+v = displayData(X_rec[1:100, :])
+imgc2, img2 = view(grid[2, 2], v; canvasOpts...)
+ImageView.annotate!(imgc2, img2, ImageView.AnnotationText(85, 15, "Recovered faces", color=RGB(1, 1, 1), fontsize=15))
 
 @printf("Program paused. Press enter to continue.\n")
 readline()
@@ -224,16 +231,10 @@ centroids, idx = runkMeans(X, initial_centroids, max_iters)
 
 #  Sample 1000 random indexes (since working with all the data is
 #  too expensive. If you have a fast computer, you may increase this.
-sel = rand(1000, 1) * size(X, 1) + 1
-
-#  Setup Color Palette
-#palette = hsv(K)
-#colors = palette(idx[sel], :)
+sel = reshape(round(Int32, rand(1000, 1) * size(X, 1) + 1), (1000,))
 
 #  Visualize the data and centroid memberships in 3D
-#figure;
-#scatter3(X[sel, 1], X[sel, 2], X[sel, 3], 10, colors);
-#title("Pixel dataset plotted in 3D. Color shows centroid memberships")
+@printf("Currently, visualizing in 3D is skipped.")
 @printf("Program paused. Press enter to continue.\n");
 readline()
 
@@ -244,12 +245,12 @@ readline()
 X_norm, mu, sigma = featureNormalize(X)
 
 # PCA and project the data to 2D
-U, S = pca(X_norm)
-Z = projectData(X_norm, U, 2)
+U, S = pca(X_norm.data)
+Z = projectData(X_norm.data, U, 2)
 
 # Plot in 2D
-#figure()
-#plotDataPoints(Z[sel, :], idx[sel], K)
-#title("Pixel dataset plotted in 2D, using PCA for dimensionality reduction")
+ls = plotDataPoints(Z[sel, :], idx[sel], K)
+p = plot(ls..., Guide.title("Pixel dataset plotted in 2D, using PCA for dimensionality reduction"))
+draw(SVGJS("ex7-pca-reduction.js.svg", 8inch, 6inch), p)
 @printf("Program paused. Press enter to continue.\n");
 readline()

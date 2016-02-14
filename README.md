@@ -27,4 +27,5 @@ julia> include("ex1.jl") # when running exercise scripts
 - Fix comments for Julia
 - Migrate from PyPlot to Gadfly or Plotly
 - Exercise7
-  - displayData.jl
+  - Plot original data in 3D
+  - 2D visualization produced using PCA (has some bugs...)

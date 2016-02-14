@@ -11,6 +11,21 @@ function findClosestCentroids(X, centroids)
   # You need to return the following variables correctly.
   idx = zeros(size(X, 1), 1)
 
+  for i = 1:n
+    k = 1
+    minv = 1000000000
+
+    for j = 1:K
+      dist = vecnorm(X[i, :] - centroids[j, :])
+
+      if dist < minv
+        minv = dist
+        k = j
+      end
+    end
+    idx[i] = k
+  end
+
   # ====================== YOUR CODE HERE ======================
   # Instructions: Go over every example, find its closest centroid, and store
   #               the index inside idx at the appropriate location.

@@ -7,8 +7,8 @@
 """ ->
 function projectData(X, U, K)
 
-# You need to return the following variables correctly.
-Z = zeros(size(X, 1), K)
+  # You need to return the following variables correctly.
+  Z = zeros(size(X, 1), K)
 
   # ====================== YOUR CODE HERE ======================
   # Instructions: Compute the projection of the data using only the top K
@@ -20,5 +20,7 @@ Z = zeros(size(X, 1), K)
   #
   # =============================================================
 
+  Ureduced = U[:, 1:K]
+  Z = X * Ureduced
   return Z
 end
